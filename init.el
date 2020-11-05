@@ -20,6 +20,13 @@
  '(git-commit-setup-hook
    (quote
     (git-commit-save-message git-commit-setup-changelog-support git-commit-turn-on-auto-fill git-commit-turn-on-flyspell git-commit-propertize-diff bug-reference-mode with-editor-usage-message)))
+ '(go-mode-hook
+   (quote
+    ((lambda nil
+       (add-hook
+        (quote before-save-hook)
+        (quote gofmt-before-save)
+        nil t)))) t)
  '(gofmt-command "goimports")
  '(indent-tabs-mode nil)
  '(kept-new-versions 6)
@@ -34,7 +41,7 @@
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (company-coq proof-general scala-mode terraform-mode ox-pandoc org-bullets haskell-mode helm-ls-git blacken spacemacs-theme helm helm-ag helm-org-rifle helm-ebdb ag groovy-mode yaml-mode clojure-mode go-mode markdown-mode markdown-mode+ markdown-toc php-mode magit)))
+    (org-cliplink flycheck lsp-ui lsp-mode magit org terraform-doc company-coq proof-general scala-mode terraform-mode ox-pandoc org-bullets haskell-mode helm-ls-git blacken spacemacs-theme helm helm-ag helm-org-rifle helm-ebdb ag groovy-mode yaml-mode clojure-mode go-mode markdown-mode markdown-mode+ markdown-toc php-mode)))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -53,14 +60,14 @@
 (global-set-key (kbd "M-x") #'helm-M-x)
 (helm-mode t)
 
+(require 'lsp-mode)
+(add-hook 'go-mode-hook #'lsp)
+
 (add-hook 'python-mode-hook 'blacken-mode)
 (add-to-list 'auto-mode-alist '("\\.jinja\\(\\.schema\\)\?\\'" . yaml-mode))
 (add-to-list 'auto-mode-alist '("Jenkinsfile\\'" . groovy-mode))
 
 (add-hook 'org-mode-hook #'org-bullets-mode)
-(add-hook 'go-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook 'gofmt-before-save nil t)))
 (add-hook 'terraform-mode-hook #'terraform-format-on-save-mode)
 
 (defun terragrunt-format-buffer ()
