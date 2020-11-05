@@ -59,6 +59,27 @@
             (add-hook 'before-save-hook 'gofmt-before-save nil t)))
 (add-hook 'terraform-mode-hook #'terraform-format-on-save-mode)
 
+(defun terragrunt-format-buffer ()
+  "Rewrite current buffer in a canonical format using terragrun hclfmt."
+  (interactive)
+  (let ((buf (get-buffer-create "*terragrunt-hclfmt*")))
+    (if (zerop (call-process-region (point-min) (point-max)
+                                    "hclfmt" nil buf nil))
+        (let ((point (point))
+              (window-start (window-start)))
+          (erase-buffer)
+          (insert-buffer-substring buf)
+          (goto-char point)
+          (set-window-start nil window-start))
+      (message "hclfmt: %s" (with-current-buffer buf (buffer-string))))
+    (kill-buffer buf)))
+
+(defun my-hcl-mode-before-save-hook ()
+  (when (eq major-mode 'hcl-mode)
+    (terragrunt-format-buffer)))
+
+(add-hook 'before-save-hook #'my-hcl-mode-before-save-hook)
+
 (defun indent-buffer ()
   "Indent the currently visited buffer."
   (interactive)
