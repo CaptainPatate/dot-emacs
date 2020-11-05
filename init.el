@@ -24,6 +24,10 @@
  '(indent-tabs-mode nil)
  '(kept-new-versions 6)
  '(org-agenda-files (quote ("~/lumapps/lumapps.org")))
+ '(magit-repository-directories
+   (quote
+    (("~/travail/backmarket/" . 2)
+     ("~/go/src/github.com/" . 2))))
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
