@@ -102,3 +102,9 @@
         (message "Indented buffer.")))))
 
 (global-set-key (kbd "C-M-\\") 'indent-region-or-buffer)
+
+;; https://emacs.stackexchange.com/a/41225
+(defun base64-encode-region-prefix-arg (&rest _args)
+  "Pass prefix arg as third arg to `base64-encode-region'."
+  (interactive "r\nP"))
+(advice-add 'base64-encode-region :before #'base64-encode-region-prefix-arg)
